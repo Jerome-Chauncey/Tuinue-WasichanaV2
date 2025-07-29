@@ -15,16 +15,18 @@ services:
     rootDir: .
     buildCommand: |
       pip install --upgrade pip
-      pip install -r requirements.txt  # Updated to root location
+      pip install -r requirements.txt
       export FLASK_APP=backend.app:create_app
-      [ ! -d "backend/migrations" ] && flask db init || true
+      cd backend || exit 1  # Change to backend directory
+      [ ! -d "migrations" ] && flask db init || true  # Run init in backend context
       flask db migrate -m "initial migration" || true
       flask db upgrade
+      cd ..  # Return to root
       PYTHONPATH=/opt/render/project/src python -c "
+      from backend.app.models import db  # Updated import path
       from backend.app import create_app
       app = create_app()
       with app.app_context():
-          from backend.models import db
           db.create_all()
       "
     startCommand: gunicorn --bind 0.0.0.0:$PORT 'backend.app:create_app()'
