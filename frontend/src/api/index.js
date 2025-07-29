@@ -1,1 +1,1 @@
-export { fetchWithAuth } from './fetchWithAuth';
+export { default as fetchWithAuth } from './fetchWithAuth';

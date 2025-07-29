@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL } from '../../config/api';
 
 const fetchWithAuth = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
