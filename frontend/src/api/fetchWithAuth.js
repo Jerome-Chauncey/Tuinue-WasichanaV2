@@ -8,7 +8,9 @@ export const fetchWithAuth = async (endpoint, options = {}) => {
     ...options.headers,
   };
 
-  const response = await fetch(`${API_BASE_URL}/api${endpoint}`, {
+  // Remove leading slash from endpoint if present to avoid duplication
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+  const response = await fetch(`${API_BASE_URL}/${cleanEndpoint}`, {
     ...options,
     headers,
   });

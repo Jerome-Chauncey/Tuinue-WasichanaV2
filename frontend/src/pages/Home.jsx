@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchWithAuth } from "../api/fetchWithAuth"; 
+import { fetchWithAuth } from "../api/fetchWithAuth"; // Named import
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Home = () => {
     // Fetch up to 3 approved charities
     const fetchCharities = async () => {
       try {
-        const data = await fetchWithAuth("/api/charities");
+        const data = await fetchWithAuth("/charities"); // Changed to /charities
         console.log("Fetched charities:", data);
         setCharities(data.slice(0, 3));
       } catch (err) {
