@@ -45,12 +45,12 @@ services:
     region: oregon
     plan: free
     branch: main
-    rootDir: frontend
+    rootDir: tuinue-wasichana-frontend  
     buildCommand: |
       npm install
       npm run build
     startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
     envVars:
       - key: VITE_API_BASE_URL
-        sync: false
+        value: https://tuinue-wasichana-api.onrender.com/api  # Set explicitly
     autoDeploy: true
