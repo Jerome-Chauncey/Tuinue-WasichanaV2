@@ -1,0 +1,32 @@
+.donor-dashboard-container {
+  min-height: calc(100vh - 4rem);
+}
+
+.donor-dashboard-main {
+  padding: 1.25rem 2.5rem;
+}
+
+.donor-dashboard-main h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #120e1b;
+  margin-bottom: 1rem;
+}
+
+.donor-dashboard-main table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.donor-dashboard-main th,
+.donor-dashboard-main td {
+  border: 1px solid #ebe7f3;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.donor-dashboard-main th {
+  background-color: #f9f8fc;
+  color: #120e1b;
+}

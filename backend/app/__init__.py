@@ -19,15 +19,15 @@ def create_app():
 
     # Updated CORS configuration
     CORS(app, resources={r"/api/*": {
-        "origins": [
-            "http://localhost:10000",  # Local frontend
-            "http://localhost:5173",   # Alternate local port
-            "https://tuinue-wasichana-ui-7po2.onrender.com"  # Deployed frontend
-        ],
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"],
-        "supports_credentials": True
-    }}, automatic_options=True)
+    "origins": [
+        "http://localhost:5173",   
+        "http://localhost:5000",   
+        "http://localhost:10000"  
+    ],
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"],
+    "supports_credentials": True
+}})
 
     from .routes import main
     app.register_blueprint(main, url_prefix='/api')

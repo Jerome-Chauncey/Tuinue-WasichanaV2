@@ -1,0 +1,60 @@
+.home-main {
+  padding: 1.25rem 2.5rem;
+}
+
+.home-section {
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  background-size: cover;
+  background-position: center;
+}
+
+.home-section.hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://www.thestatesman.com/wp-content/uploads/2023/05/students-iStock-1.jpg');
+  color: white;
+  text-align: center;
+}
+
+.home-section.hero h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.home-section.hero p {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.home-section.hero a {
+  background-color: #5a19e5;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.home-section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #120e1b;
+  margin-bottom: 1rem;
+}
+
+.home-section p {
+  color: #120e1b;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.home-section .apply-link {
+  background-color: #ebe7f3;
+  color: #120e1b;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+}

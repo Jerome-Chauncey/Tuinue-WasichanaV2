@@ -15,8 +15,8 @@ def get_charities():
     charities = Charity.query.all()
     return jsonify([{'id': c.id, 'name': c.name, 'description': c.description} for c in charities]), 200
 
-@main.route('/register', methods=['POST'])
-def register():
+@main.route('/signup', methods=['POST'])  
+def signup():  
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -32,17 +32,55 @@ def register():
 
     return jsonify({'message': 'User registered successfully'}), 201
 
-@main.route('/login', methods=['POST'])
+from datetime import timedelta
+from flask import jsonify, request
+from flask_jwt_extended import create_access_token
+
+@main.route('/login', methods=['POST', 'OPTIONS'])
 def login():
+    if request.method == 'OPTIONS':
+        return '', 200
+        
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
 
     user = User.query.filter_by(email=email).first()
-    if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-        access_token = create_access_token(identity=user.id)
-        return jsonify({'access_token': access_token, 'role': user.role}), 200
-    return jsonify({'message': 'Invalid credentials'}), 401
+    
+    if not user:
+        return jsonify({
+            'success': False,
+            'message': 'Invalid credentials',
+            'redirect': '/login'
+        }), 401
+    
+    if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+        return jsonify({
+            'success': False,
+            'message': 'Invalid credentials',
+            'redirect': '/login'
+        }), 401
+
+    access_token = create_access_token(
+        identity={
+            'id': user.id,
+            'email': user.email,
+            'role': user.role
+        },
+        additional_claims={
+            'iss': 'your-app-name',
+            'aud': 'your-app-client'
+        }
+    )
+    
+    return jsonify({
+        'success': True,
+        'access_token': access_token,
+        'token': access_token,  # For backward compatibility
+        'role': user.role,
+        'redirect': f'/{user.role}-dashboard',
+        'message': 'Login successful'
+    }), 200
 
 @main.route('/donate', methods=['POST'])
 @jwt_required()
@@ -103,3 +141,10 @@ def stories():
         db.session.add(story)
         db.session.commit()
         return jsonify({'message': 'Story added successfully'}), 201
+
+
+@main.route('/test-users')
+def test_users():
+    from app.models import User
+    users = User.query.all()
+    return jsonify([{'email': u.email, 'role': u.role} for u in users])

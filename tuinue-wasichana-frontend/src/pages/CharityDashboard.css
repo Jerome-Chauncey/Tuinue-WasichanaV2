@@ -1,0 +1,23 @@
+.charity-dashboard-container {
+  min-height: calc(100vh - 4rem);
+}
+
+.charity-dashboard-main {
+  padding: 1.25rem 2.5rem;
+}
+
+.charity-dashboard-main h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #120e1b;
+  margin-bottom: 1rem;
+}
+
+.charity-dashboard-main p {
+  color: #120e1b;
+  margin-bottom: 0.5rem;
+}
+
+.charity-dashboard-main strong {
+  font-weight: bold;
+}

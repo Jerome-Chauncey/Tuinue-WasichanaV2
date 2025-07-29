@@ -1,0 +1,42 @@
+.admin-dashboard-container {
+  min-height: calc(100vh - 4rem);
+}
+
+.admin-dashboard-main {
+  padding: 1.25rem 2.5rem;
+}
+
+.admin-dashboard-main h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #120e1b;
+  margin-bottom: 1rem;
+}
+
+.admin-dashboard-main table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.admin-dashboard-main th,
+.admin-dashboard-main td {
+  border: 1px solid #ebe7f3;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.admin-dashboard-main th {
+  background-color: #f9f8fc;
+  color: #120e1b;
+}
+
+.admin-dashboard-main ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.admin-dashboard-main li {
+  color: #120e1b;
+  margin-bottom: 0.5rem;
+}

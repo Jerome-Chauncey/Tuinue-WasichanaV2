@@ -1,1 +1,0 @@
-export const API_BASE_URL = 'https://tuinue-wasichana-api-25f7.onrender.com';
