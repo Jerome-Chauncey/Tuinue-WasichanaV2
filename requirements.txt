@@ -6,4 +6,5 @@ Flask-Cors==5.0.0
 gunicorn==23.0.0
 python-dotenv==1.0.1
 bcrypt==4.2.0
-psycopg2-binary==2.9.9 
+psycopg2-binary  # Removed specific version to use the latest compatible wheel
+# Alternatively, use: psycopg  # Uncomment this line and comment psycopg2-binary if needed
