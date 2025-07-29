@@ -1,14 +1,20 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // Bind to all interfaces
-    port: 10000, // Render’s default port (avoid reserved ports 18012, 18013, 19099)
+    port: 10000,
+    host: '0.0.0.0',
   },
   preview: {
-    host: '0.0.0.0',
     port: 10000,
+    host: '0.0.0.0',
+    allowedHosts: [
+      'localhost',
+      'tuinue-wasichana-ui-7po2.onrender.com', // Allow the deployed host
+      '127.0.0.1',
+    ],
   },
 });
