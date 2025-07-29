@@ -1,13 +1,33 @@
+databases:
+  - name: tuinue-wasichana-db
+    region: oregon
+    plan: free
+    databaseName: tuinue_wasichana
+    user: dbadmin
+
 services:
   - type: web
-    name: tuinue-wasichana-backend
+    name: tuinue-wasichana-api
     env: python
     region: oregon
     plan: free
+    branch: main
+    rootDir: .
     buildCommand: |
-      pip install -r requirements.txt
+      pip install --upgrade pip
+      pip install -r backend/requirements.txt
+      export FLASK_APP=backend.app:create_app
+      [ ! -d "backend/migrations" ] && flask db init || true
+      flask db migrate -m "initial migration" || true
       flask db upgrade
-    startCommand: gunicorn --chdir backend run:app
+      PYTHONPATH=/opt/render/project/src python -c "
+      from backend.app import create_app
+      app = create_app()
+      with app.app_context():
+          from backend.models import db
+          db.create_all()
+      "
+    startCommand: gunicorn --bind 0.0.0.0:$PORT 'backend.app:create_app()'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -15,24 +35,24 @@ services:
           property: connectionString
       - key: FLASK_ENV
         value: production
-      - key: SECRET_KEY
+      - key: FLASK_SECRET_KEY
         generateValue: true
-      - key: STRIPE_SECRET_KEY
-        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:5173,https://tuinue-wasichana-ui.onrender.com
     autoDeploy: true
+
   - type: web
-    name: tuinue-wasichana-frontend
-    env: static
+    name: tuinue-wasichana-ui
+    env: node
+    region: oregon
     plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    branch: main
+    rootDir: frontend
+    buildCommand: |
+      npm install
+      npm run build
+    startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
     envVars:
       - key: VITE_API_BASE_URL
         sync: false
     autoDeploy: true
-databases:
-  - name: tuinue-wasichana-db
-    databaseName: tuinue_wasichana
-    user: dbadmin
-    region: oregon
-    plan: free
