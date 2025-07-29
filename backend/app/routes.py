@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
-from app import db
-from app.models import User, Charity, Donation, Story
+from . import db  # Updated import to relative path
+from backend.app.models import User, Charity, Donation, Story
 from datetime import datetime
 import uuid
 import bcrypt
@@ -53,17 +53,14 @@ def donate():
     is_recurring = data.get('is_recurring', False)
     frequency = data.get('frequency', None)
 
-
     if not charity_id or not amount:
         return jsonify({'message': 'charity_id and amount are required'}), 400
 
- 
     charity = Charity.query.get(charity_id)
     if not charity:
         return jsonify({'message': 'Charity not found'}), 404
 
-
-    transaction_id = str(uuid.uuid4())  # Generate a mock transaction ID
+    transaction_id = str(uuid.uuid4())
     donation = Donation(
         user_id=user_id,
         charity_id=charity_id,
