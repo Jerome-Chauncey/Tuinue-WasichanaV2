@@ -16,7 +16,8 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
-    CORS(app)
+
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:10000", "methods": ["GET", "POST", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
 
     from .routes import main
     app.register_blueprint(main)
