@@ -19,8 +19,8 @@ services:
       cd backend || exit 1
       export FLASK_APP=app:create_app
       [ ! -d "migrations" ] && flask db init || true
-      flask db migrate -m "initial migration" || true
-      flask db upgrade
+      flask db migrate -m "sync migration" || true
+      flask db upgrade || true
     startCommand: cd backend && gunicorn --bind 0.0.0.0:$PORT --timeout 120 'app:create_app()'
     envVars:
       - key: DATABASE_URL
@@ -45,12 +45,12 @@ services:
     region: oregon
     plan: free
     branch: main
-    rootDir: tuinue-wasichana-frontend  
+    rootDir: tuinue-wasichana-frontend
     buildCommand: |
       npm install
       npm run build
     startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://tuinue-wasichana-api.onrender.com/api  # Set explicitly
+        value: https://tuinue-wasichana-api.onrender.com/api
     autoDeploy: true
