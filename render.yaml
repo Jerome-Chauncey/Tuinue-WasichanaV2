@@ -39,6 +39,10 @@ services:
         generateValue: true
       - key: CORS_ALLOWED_ORIGINS
         value: http://localhost:5173,https://tuinue-wasichana-ui.onrender.com
+      - key: CORS_METHODS
+        value: GET,POST,OPTIONS
+      - key: CORS_HEADERS
+        value: Content-Type,Authorization
     autoDeploy: true
 
   - type: web
