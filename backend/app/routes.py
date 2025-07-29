@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 @main.route('/charities', methods=['GET', 'OPTIONS'])
 def get_charities():
     if request.method == 'OPTIONS':
-        return '', 200 
+        return '', 200  
     charities = Charity.query.all()
     return jsonify([{'id': c.id, 'name': c.name, 'description': c.description} for c in charities]), 200
 

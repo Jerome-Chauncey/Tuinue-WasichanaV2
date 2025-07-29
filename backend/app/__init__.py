@@ -17,11 +17,12 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
 
+    # Updated CORS configuration
     CORS(app, resources={r"/api/*": {
         "origins": [
-            "http://localhost:10000",  
-            "http://localhost:5173", 
-            "https://tuinue-wasichana-ui-7po2.onrender.com"  
+            "http://localhost:10000",  # Local frontend
+            "http://localhost:5173",   # Alternate local port
+            "https://tuinue-wasichana-ui-7po2.onrender.com"  # Deployed frontend
         ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"],
@@ -31,13 +32,15 @@ def create_app():
     from .routes import main
     app.register_blueprint(main, url_prefix='/api')
 
-    # CORS headers for all responses
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        response.headers.add('Access-Control-Max-Age', '86400')  # Cache preflight for 24 hours
+        if request.method == 'OPTIONS':
+            response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+            response.headers['Access-Control-Max-Age'] = '86400'  # Cache preflight for 24 hours
+            return response
+        response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
         return response
 
     return app
