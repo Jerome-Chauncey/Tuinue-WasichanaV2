@@ -17,13 +17,13 @@ services:
       pip install --upgrade pip
       pip install -r requirements.txt
       export FLASK_APP=backend.app:create_app
-      cd backend || exit 1  # Change to backend directory
-      [ ! -d "migrations" ] && flask db init || true  # Run init in backend context
+      cd backend || exit 1  # Ensure we are in the backend directory
+      [ ! -d "migrations" ] && FLASK_APP=backend.app:create_app flask db init || true  # Explicitly set FLASK_APP for init
       flask db migrate -m "initial migration" || true
       flask db upgrade
       cd ..  # Return to root
       PYTHONPATH=/opt/render/project/src python -c "
-      from backend.app.models import db  # Updated import path
+      from backend.app.models import db  # Corrected import path
       from backend.app import create_app
       app = create_app()
       with app.app_context():
