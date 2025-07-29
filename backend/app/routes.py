@@ -1,12 +1,19 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
-from . import db  # Updated import to relative path
-from backend.app.models import User, Charity, Donation, Story
+from . import db
+from .models import User, Charity, Donation, Story
 from datetime import datetime
 import uuid
 import bcrypt
 
 main = Blueprint('main', __name__)
+
+@main.route('/charities', methods=['GET', 'OPTIONS'])
+def get_charities():
+    if request.method == 'OPTIONS':
+        return '', 200 
+    charities = Charity.query.all()
+    return jsonify([{'id': c.id, 'name': c.name, 'description': c.description} for c in charities]), 200
 
 @main.route('/register', methods=['POST'])
 def register():
@@ -36,11 +43,6 @@ def login():
         access_token = create_access_token(identity=user.id)
         return jsonify({'access_token': access_token, 'role': user.role}), 200
     return jsonify({'message': 'Invalid credentials'}), 401
-
-@main.route('/charities', methods=['GET'])
-def get_charities():
-    charities = Charity.query.all()
-    return jsonify([{'id': c.id, 'name': c.name, 'description': c.description} for c in charities]), 200
 
 @main.route('/donate', methods=['POST'])
 @jwt_required()
@@ -79,26 +81,25 @@ def donate():
         'donation_id': donation.id
     }), 200
 
-@main.route('/stories', methods=['GET'])
-def get_stories():
-    stories = Story.query.all()
-    return jsonify([{'id': s.id, 'charity_id': s.charity_id, 'title': s.title, 'content': s.content} for s in stories]), 200
-
-@main.route('/stories', methods=['POST'])
+@main.route('/stories', methods=['GET', 'POST'])
 @jwt_required()
-def add_story():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-    if user.role != 'charity':
-        return jsonify({'message': 'Unauthorized'}), 403
+def stories():
+    if request.method == 'GET':
+        stories = Story.query.all()
+        return jsonify([{'id': s.id, 'charity_id': s.charity_id, 'title': s.title, 'content': s.content} for s in stories]), 200
+    elif request.method == 'POST':
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if user.role != 'charity':
+            return jsonify({'message': 'Unauthorized'}), 403
 
-    data = request.get_json()
-    story = Story(
-        charity_id=data.get('charity_id'),
-        title=data.get('title'),
-        content=data.get('content'),
-        created_at=datetime.utcnow()
-    )
-    db.session.add(story)
-    db.session.commit()
-    return jsonify({'message': 'Story added successfully'}), 201
+        data = request.get_json()
+        story = Story(
+            charity_id=data.get('charity_id'),
+            title=data.get('title'),
+            content=data.get('content'),
+            created_at=datetime.utcnow()
+        )
+        db.session.add(story)
+        db.session.commit()
+        return jsonify({'message': 'Story added successfully'}), 201
