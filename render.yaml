@@ -15,7 +15,7 @@ services:
     rootDir: .
     buildCommand: |
       pip install --upgrade pip
-      pip install -r backend/requirements.txt
+      pip install -r requirements.txt  # Updated to root location
       export FLASK_APP=backend.app:create_app
       [ ! -d "backend/migrations" ] && flask db init || true
       flask db migrate -m "initial migration" || true
